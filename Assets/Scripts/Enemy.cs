@@ -4,15 +4,17 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    public float speed;
-
+    private float speed;
     private Rigidbody enemyRigidBody;
     private GameObject player;
+    private SpawnManagerX spawnManager;
     private int destroyThreshold = -10;
     // Start is called before the first frame update
     private void Start()
     {
         enemyRigidBody = GetComponent<Rigidbody>();
+        spawnManager = GameObject.Find("SpawnManager").GetComponent<SpawnManagerX>();
+        speed = spawnManager.enemySpeed;
         player = GameObject.Find("Player");
     }
 
