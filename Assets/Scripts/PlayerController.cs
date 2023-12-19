@@ -6,10 +6,14 @@ public class PlayerController : MonoBehaviour
 {
     public float speed;
     public bool hasPowerUp = false;
+    public int powerUpExpTime = 7;
+    public GameObject powerUpIndicator;
 
     private Rigidbody playerRigidBody;
     private GameObject focalPoint;
     private float knockbackForce = 15f;
+    private Vector3 powerUpIndicatorOffset = new Vector3(0, -0.5f, 0);
+
     private void Start()
     {
         playerRigidBody = GetComponent<Rigidbody>();
@@ -21,7 +25,7 @@ public class PlayerController : MonoBehaviour
         float forwardInput = Input.GetAxis("Vertical");
 
         playerRigidBody.AddForce(focalPoint.transform.forward * speed * forwardInput * Time.deltaTime);
-
+        powerUpIndicator.transform.position = transform.position + powerUpIndicatorOffset;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -30,6 +34,8 @@ public class PlayerController : MonoBehaviour
         {
             Destroy(other.gameObject);
             hasPowerUp = true;
+            powerUpIndicator.gameObject.SetActive(true);
+            StartCoroutine(PowerUpCountdownRoutine());
         }
     }
 
@@ -44,5 +50,12 @@ public class PlayerController : MonoBehaviour
 
             Debug.Log("A player collided with: " + collision.gameObject + ". And has powerUp set to: " + hasPowerUp);
         }
+    }
+
+    IEnumerator PowerUpCountdownRoutine()
+    {
+        yield return new WaitForSeconds(powerUpExpTime);
+        hasPowerUp = false;
+        powerUpIndicator.gameObject.SetActive(false);
     }
 }

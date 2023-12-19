@@ -8,6 +8,7 @@ public class Enemy : MonoBehaviour
 
     private Rigidbody enemyRigidBody;
     private GameObject player;
+    private int destroyThreshold = -10;
     // Start is called before the first frame update
     private void Start()
     {
@@ -20,5 +21,10 @@ public class Enemy : MonoBehaviour
     {
         Vector3 lookDirection = (player.transform.position - transform.position).normalized;
         enemyRigidBody.AddForce( lookDirection * speed * Time.deltaTime);
+
+        if (transform.position.y < destroyThreshold) 
+        { 
+            Destroy(gameObject);
+        }
     }
 }
